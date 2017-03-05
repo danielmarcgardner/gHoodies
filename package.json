@@ -21,6 +21,9 @@
   "dependencies": {
     "body-parser": "^1.17.0",
     "express": "^4.15.0",
-    "fs": "0.0.1-security"
-  }
+    "fs": "0.0.1-security",
+    "knex": "^0.12.7",
+    "pg": "^6.1.2"
+  },
+  "devDependencies": {}
 }
