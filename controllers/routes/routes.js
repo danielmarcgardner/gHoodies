@@ -12,7 +12,6 @@ ROUTER.use(bodyParser.urlencoded({
     extended: true
 }));
 
-
 ROUTER.get('/students', (req, res) => {
     KNEX('students')
         .orderBy('name', 'asc')
@@ -26,21 +25,27 @@ ROUTER.get('/students', (req, res) => {
         });
 });
 
-
-ROUTER.post('/students', (req, res) => {
-  KNEX('students').insert(req.body)
-  .then(() => {
-    KNEX('students').where('name', req.body.name)
-    .then((newStudent) => {
-      res.status(200).json(newStudent)
-    })
-  })
-  .catch((err) => {
-      KNEX.destroy();
-      console.error(err);
-      res.status(500);
-  });
-})
+// ROUTER.post('/students', (req, res) => {
+//   let newStudent = {
+//     name: req.body.name,
+//     email: req.body.email,
+//     size: req.body.size,
+//     cohort_id: req.body.cohort_id
+//   }
+//   console.log(newStudent)
+//   KNEX('students').insert(newStudent)
+//   .then(() => {
+//     KNEX('students').where('name', newStudent.name)
+//     .then((studentToSend) => {
+//       res.status(200).json(studentToSend)
+//     })
+//   })
+//   .catch((err) => {
+//       KNEX.destroy();
+//       console.error(err);
+//       res.status(500);
+//   });
+// })
 
 ROUTER.get('/students/:id', (req, res) => {
     let id = Number.parseInt(req.params.id);
@@ -53,6 +58,36 @@ ROUTER.get('/students/:id', (req, res) => {
 
     KNEX('students')
         .where('id', id)
+        .then((student) => {
+            res.status(200).json(student);
+        })
+        .catch((err) => {
+            KNEX.destroy();
+            console.error(err);
+            res.status(500);
+        });
+});
+
+ROUTER.get('/students/name/:name', (req, res) => {
+    let namewithspace = req.params.name
+
+    function remover(named){
+      let remove = named.split('%20')
+      let unname = remove.join(' ')
+      return unname
+    }
+    let name = remover(namewithspace)
+
+    // console.log(name)
+
+    if (!name) {
+        res.set('Content-Type', 'text/plain');
+        res.body = 'Bad Request';
+        res.sendStatus(400);
+    }
+
+    KNEX('students')
+        .where('name', name)
         .then((student) => {
             res.status(200).json(student);
         })
@@ -90,7 +125,7 @@ ROUTER.patch('/students/:id', (req, res) => {
         });
 });
 
-ROUTER.get('/cohorts/:gnum', (req, res) => {
+ROUTER.get('/cohorts/:gnum/students', (req, res) => {
     let gnum = Number.parseInt(req.params.gnum);
     KNEX('students')
         .innerJoin('cohorts', 'cohorts.id', 'students.cohort_id')
@@ -107,7 +142,7 @@ ROUTER.get('/cohorts/:gnum', (req, res) => {
 });
 
 ROUTER.get('/cohorts', (req, res) => {
-  KNEX('cohorts')
+  KNEX('cohorts').select('id', 'gnum')
   .then((justCohort) => {
     res.status(200).json(justCohort)
   })
