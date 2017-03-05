@@ -26,6 +26,22 @@ ROUTER.get('/students', (req, res) => {
         });
 });
 
+
+ROUTER.post('/students', (req, res) => {
+  KNEX('students').insert(req.body)
+  .then(() => {
+    KNEX('students').where('name', req.body.name)
+    .then((newStudent) => {
+      res.status(200).json(newStudent)
+    })
+  })
+  .catch((err) => {
+      KNEX.destroy();
+      console.error(err);
+      res.status(500);
+  });
+})
+
 ROUTER.get('/students/:id', (req, res) => {
     let id = Number.parseInt(req.params.id);
 
@@ -89,5 +105,17 @@ ROUTER.get('/cohorts/:gnum', (req, res) => {
             res.status(500);
         });
 });
+
+ROUTER.get('/cohorts', (req, res) => {
+  KNEX('cohorts')
+  .then((justCohort) => {
+    res.status(200).json(justCohort)
+  })
+  .catch((err) => {
+      KNEX.destroy();
+      console.error(err);
+      res.status(500);
+  });
+})
 
 module.exports = ROUTER;
