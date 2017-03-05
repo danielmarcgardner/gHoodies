@@ -6,7 +6,10 @@ const bodyParser = require('body-parser');
 const ENV = process.env.NODE_ENV || "development";
 const CONFIG = require("../../knexfile.js")[ENV];
 const KNEX = require('knex')(CONFIG);
+const morgan = require('morgan');
+const app = EXPRESS();
 
+app.disable('x-powered-by');
 ROUTER.use(bodyParser.json());
 ROUTER.use(bodyParser.urlencoded({
     extended: true
@@ -24,6 +27,8 @@ ROUTER.get('/students', (req, res) => {
             res.status(500);
         });
 });
+
+
 
 // ROUTER.post('/students', (req, res) => {
 //   let newStudent = {
@@ -46,6 +51,7 @@ ROUTER.get('/students', (req, res) => {
 //       res.status(500);
 //   });
 // })
+
 
 ROUTER.get('/students/:id', (req, res) => {
     let id = Number.parseInt(req.params.id);
@@ -102,7 +108,7 @@ ROUTER.patch('/students/:id', (req, res) => {
 
     let id = Number.parseInt(req.params.id);
 
-    if (!id || !size) {
+    if (!id) {
         res.set('Content-Type', 'text/plain');
         res.body = 'Bad Request';
         res.sendStatus(400);
@@ -152,5 +158,9 @@ ROUTER.get('/cohorts', (req, res) => {
       res.status(500);
   });
 })
+
+app.use((req, res) => {
+    res.sendStatus(404);
+});
 
 module.exports = ROUTER;
