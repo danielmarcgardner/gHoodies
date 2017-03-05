@@ -1,3 +1,5 @@
+/*jshint esversion: 6 */
+
 const EXPRESS = require('express');
 const ROUTER = EXPRESS.Router();
 const bodyParser = require('body-parser');
@@ -16,7 +18,7 @@ ROUTER.get('/students', (req, res) => {
         .orderBy('name', 'asc')
         .then((students) => {
             KNEX.destroy();
-            res.status(200).json(students)
+            res.status(200).json(students);
         })
         .catch((err) => {
             KNEX.destroy();
@@ -36,12 +38,16 @@ ROUTER.patch('/students/:id', (req, res) => {
         res.sendStatus(400);
     }
 
-    let student = KNEX('students')
+    KNEX('students')
         .where('id', id)
         .update(req.body)
         .then((data) => {
-            KNEX.destroy();
-            res.sendStatus(202);
+            KNEX('students')
+                .where('id', id)
+                .then((student) => {
+                    KNEX.destroy();
+                    res.status(202).json(student);
+                });
         })
         .catch((err) => {
             KNEX.destroy();
@@ -58,7 +64,7 @@ ROUTER.get('/cohorts/:gnum', (req, res) => {
         .select('name', 'fulfilled', 'size')
         .then((cohortStudents) => {
             KNEX.destroy();
-            res.status(200).json(cohortStudents)
+            res.status(200).json(cohortStudents);
         })
         .catch((err) => {
             KNEX.destroy();
