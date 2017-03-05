@@ -6,7 +6,10 @@ const bodyParser = require('body-parser');
 const ENV = process.env.NODE_ENV || "development";
 const CONFIG = require("../../knexfile.js")[ENV];
 const KNEX = require('knex')(CONFIG);
+const morgan = require('morgan');
+const app = EXPRESS();
 
+app.disable('x-powered-by');
 ROUTER.use(bodyParser.json());
 ROUTER.use(bodyParser.urlencoded({
     extended: true
@@ -28,18 +31,18 @@ ROUTER.get('/students', (req, res) => {
 
 
 ROUTER.post('/students', (req, res) => {
-  KNEX('students').insert(req.body)
-  .then(() => {
-    KNEX('students').where('name', req.body.name)
-    .then((newStudent) => {
-      res.status(200).json(newStudent)
-    })
-  })
-  .catch((err) => {
-      KNEX.destroy();
-      console.error(err);
-      res.status(500);
-  });
+    KNEX('students').insert(req.body)
+        .then(() => {
+            KNEX('students').where('name', req.body.name)
+                .then((newStudent) => {
+                    res.status(200).json(newStudent)
+                })
+        })
+        .catch((err) => {
+            KNEX.destroy();
+            console.error(err);
+            res.status(500);
+        });
 })
 
 ROUTER.get('/students/:id', (req, res) => {
@@ -67,7 +70,7 @@ ROUTER.patch('/students/:id', (req, res) => {
 
     let id = Number.parseInt(req.params.id);
 
-    if (!id || !size) {
+    if (!id) {
         res.set('Content-Type', 'text/plain');
         res.body = 'Bad Request';
         res.sendStatus(400);
@@ -107,15 +110,19 @@ ROUTER.get('/cohorts/:gnum', (req, res) => {
 });
 
 ROUTER.get('/cohorts', (req, res) => {
-  KNEX('cohorts')
-  .then((justCohort) => {
-    res.status(200).json(justCohort)
-  })
-  .catch((err) => {
-      KNEX.destroy();
-      console.error(err);
-      res.status(500);
-  });
+    KNEX('cohorts')
+        .then((justCohort) => {
+            res.status(200).json(justCohort)
+        })
+        .catch((err) => {
+            KNEX.destroy();
+            console.error(err);
+            res.status(500);
+        });
 })
+
+app.use((req, res) => {
+    res.sendStatus(404);
+});
 
 module.exports = ROUTER;
