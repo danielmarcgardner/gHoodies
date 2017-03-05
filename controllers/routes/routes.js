@@ -17,7 +17,6 @@ ROUTER.get('/students', (req, res) => {
     KNEX('students')
         .orderBy('name', 'asc')
         .then((students) => {
-            KNEX.destroy();
             res.status(200).json(students);
         })
         .catch((err) => {
@@ -26,6 +25,21 @@ ROUTER.get('/students', (req, res) => {
             res.status(500);
         });
 });
+
+ROUTER.post('/students', (req, res) => {
+  KNEX('students').insert(req.body)
+  .then(() => {
+    KNEX('students').where('name', req.body.name)
+    .then((newStudent) => {
+      res.status(200).json(newStudent)
+    })
+  })
+  .catch((err) => {
+      KNEX.destroy();
+      console.error(err);
+      res.status(500);
+  });
+})
 
 ROUTER.patch('/students/:id', (req, res) => {
 
@@ -45,7 +59,6 @@ ROUTER.patch('/students/:id', (req, res) => {
             KNEX('students')
                 .where('id', id)
                 .then((student) => {
-                    KNEX.destroy();
                     res.status(202).json(student);
                 });
         })
@@ -63,7 +76,6 @@ ROUTER.get('/cohorts/:gnum', (req, res) => {
         .where(`gnum`, '=', `${gnum}`)
         .select('name', 'fulfilled', 'size')
         .then((cohortStudents) => {
-            KNEX.destroy();
             res.status(200).json(cohortStudents);
         })
         .catch((err) => {
@@ -72,5 +84,17 @@ ROUTER.get('/cohorts/:gnum', (req, res) => {
             res.status(500);
         });
 });
+
+ROUTER.get('/cohorts', (req, res) => {
+  KNEX('cohorts')
+  .then((justCohort) => {
+    res.status(200).json(justCohort)
+  })
+  .catch((err) => {
+      KNEX.destroy();
+      console.error(err);
+      res.status(500);
+  });
+})
 
 module.exports = ROUTER;

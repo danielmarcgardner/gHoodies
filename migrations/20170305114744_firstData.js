@@ -13,7 +13,7 @@ exports.up = function(knex, Promise) {
     table.string('name').notNullable().defaultTo('');
     table.string('email').notNullable().defaultTo('');
     table.string('size').notNullable().defaultTo('');
-    table.boolean('fulfilled');
+    table.boolean('fulfilled').defaultTo(false)
     table.integer('cohort_id').unsigned();
     table.foreign('cohort_id').references('cohorts.id').onDelete('cascade');
     table.timestamp('created_at').notNullable().defaultTo(knex.fn.now());
