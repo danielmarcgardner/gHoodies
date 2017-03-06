@@ -15,6 +15,14 @@ ROUTER.use(bodyParser.urlencoded({
     extended: true
 }));
 
+function remover(named){
+  let remove = named.split('%20')
+  let unname = remove.join(' ')
+  return unname
+}
+
+app.use('/', EXPRESS.static('./'))
+
 ROUTER.get('/students', (req, res) => {
     KNEX('students')
         .orderBy('name', 'asc')
@@ -28,29 +36,27 @@ ROUTER.get('/students', (req, res) => {
         });
 });
 
-
-
-// ROUTER.post('/students', (req, res) => {
-//   let newStudent = {
-//     name: req.body.name,
-//     email: req.body.email,
-//     size: req.body.size,
-//     cohort_id: req.body.cohort_id
-//   }
-//   console.log(newStudent)
-//   KNEX('students').insert(newStudent)
-//   .then(() => {
-//     KNEX('students').where('name', newStudent.name)
-//     .then((studentToSend) => {
-//       res.status(200).json(studentToSend)
-//     })
-//   })
-//   .catch((err) => {
-//       KNEX.destroy();
-//       console.error(err);
-//       res.status(500);
-//   });
-// })
+ROUTER.post('/students', (req, res) => {
+    let newStudent = {
+        name: req.body.name,
+        email: req.body.email,
+        size: req.body.size,
+        cohort_id: req.body.cohort_id
+    }
+    console.log(newStudent)
+    KNEX('students').insert(newStudent)
+        .then(() => {
+            KNEX('students').where('name', newStudent.name)
+                .then((studentToSend) => {
+                    res.status(200).json(studentToSend)
+                })
+        })
+        .catch((err) => {
+            KNEX.destroy();
+            console.error(err);
+            res.status(500);
+        });
+})
 
 
 ROUTER.get('/students/:id', (req, res) => {
@@ -76,12 +82,13 @@ ROUTER.get('/students/:id', (req, res) => {
 
 ROUTER.get('/students/name/:name', (req, res) => {
     let namewithspace = req.params.name
-
     function remover(named){
       let remove = named.split('%20')
       let unname = remove.join(' ')
       return unname
     }
+
+
     let name = remover(namewithspace)
 
     // console.log(name)
