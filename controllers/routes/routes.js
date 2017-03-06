@@ -5,7 +5,7 @@ const ROUTER = EXPRESS.Router();
 const bodyParser = require('body-parser');
 const ENV = process.env.NODE_ENV || "development";
 const CONFIG = require("../../knexfile.js")[ENV];
-const KNEX = require('knex')(CONFIG);
+// const KNEX = require('knex')(CONFIG);
 const morgan = require('morgan');
 const app = EXPRESS();
 
@@ -16,42 +16,56 @@ ROUTER.use(bodyParser.urlencoded({
 }));
 
 ROUTER.get('/students', (req, res) => {
-    KNEX('students')
+    let knex = require('knex')(CONFIG);
+
+    knex('students')
         .orderBy('name', 'asc')
         .then((students) => {
             res.status(200).json(students);
         })
         .catch((err) => {
-            KNEX.destroy();
             console.error(err);
             res.status(500);
+        })
+        .finally(function() {
+            knex.destroy();
         });
 });
 
+ROUTER.post('/students', (req, res) => {
+    if (!req.body.name ||
+        !req.body.email ||
+        !req.body.size ||
+        !req.body.cohort_id) {
+        res.set('Content-Type', 'text/plain');
+        res.body = 'Bad Request';
+        res.sendStatus(400);
+    }
 
+    let knex = require('knex')(CONFIG);
 
-// ROUTER.post('/students', (req, res) => {
-//   let newStudent = {
-//     name: req.body.name,
-//     email: req.body.email,
-//     size: req.body.size,
-//     cohort_id: req.body.cohort_id
-//   }
-//   console.log(newStudent)
-//   KNEX('students').insert(newStudent)
-//   .then(() => {
-//     KNEX('students').where('name', newStudent.name)
-//     .then((studentToSend) => {
-//       res.status(200).json(studentToSend)
-//     })
-//   })
-//   .catch((err) => {
-//       KNEX.destroy();
-//       console.error(err);
-//       res.status(500);
-//   });
-// })
+    let newStudent = {
+        name: req.body.name,
+        email: req.body.email,
+        size: req.body.size,
+        cohort_id: req.body.cohort_id
+    }
 
+    knex('students').insert(newStudent)
+        .then(() => {
+            knex('students').where('name', newStudent.name)
+                .then((studentToSend) => {
+                    res.status(200).json(studentToSend)
+                })
+        })
+        .catch((err) => {
+            console.error(err);
+            res.status(500);
+        })
+        .finally(function() {
+            knex.destroy();
+        });
+})
 
 ROUTER.get('/students/:id', (req, res) => {
     let id = Number.parseInt(req.params.id);
@@ -62,29 +76,32 @@ ROUTER.get('/students/:id', (req, res) => {
         res.sendStatus(400);
     }
 
-    KNEX('students')
+    let knex = require('knex')(CONFIG);
+
+    knex('students')
         .where('id', id)
         .then((student) => {
             res.status(200).json(student);
         })
         .catch((err) => {
-            KNEX.destroy();
             console.error(err);
             res.status(500);
+        })
+        .finally(function() {
+            knex.destroy();
         });
 });
 
 ROUTER.get('/students/name/:name', (req, res) => {
     let namewithspace = req.params.name
 
-    function remover(named){
-      let remove = named.split('%20')
-      let unname = remove.join(' ')
-      return unname
+    function remover(named) {
+        let remove = named.split('%20')
+        let unname = remove.join(' ')
+        return unname
     }
-    let name = remover(namewithspace)
 
-    // console.log(name)
+    let name = remover(namewithspace)
 
     if (!name) {
         res.set('Content-Type', 'text/plain');
@@ -92,15 +109,19 @@ ROUTER.get('/students/name/:name', (req, res) => {
         res.sendStatus(400);
     }
 
-    KNEX('students')
+    let knex = require('knex')(CONFIG);
+
+    knex('students')
         .where('name', name)
         .then((student) => {
             res.status(200).json(student);
         })
         .catch((err) => {
-            KNEX.destroy();
             console.error(err);
             res.status(500);
+        })
+        .finally(function() {
+            knex.destroy();
         });
 });
 
@@ -114,26 +135,39 @@ ROUTER.patch('/students/:id', (req, res) => {
         res.sendStatus(400);
     }
 
-    KNEX('students')
+    let knex = require('knex')(CONFIG);
+
+    knex('students')
         .where('id', id)
         .update(req.body)
         .then((data) => {
-            KNEX('students')
+            knex('students')
                 .where('id', id)
                 .then((student) => {
                     res.status(202).json(student);
                 });
         })
         .catch((err) => {
-            KNEX.destroy();
             console.error(err.stack);
             return res.sendStatus(500);
+        })
+        .finally(function() {
+            knex.destroy();
         });
 });
 
 ROUTER.get('/cohorts/:gnum/students', (req, res) => {
     let gnum = Number.parseInt(req.params.gnum);
-    KNEX('students')
+
+    if (!gnum) {
+        res.set('Content-Type', 'text/plain');
+        res.body = 'Bad Request';
+        res.sendStatus(400);
+    }
+
+    let knex = require('knex')(CONFIG);
+
+    knex('students')
         .innerJoin('cohorts', 'cohorts.id', 'students.cohort_id')
         .where(`gnum`, gnum)
         .select('name', 'fulfilled', 'size')
@@ -141,22 +175,28 @@ ROUTER.get('/cohorts/:gnum/students', (req, res) => {
             res.status(200).json(cohortStudents);
         })
         .catch((err) => {
-            KNEX.destroy();
             console.error(err);
             res.status(500);
+        })
+        .finally(function() {
+            knex.destroy();
         });
 });
 
 ROUTER.get('/cohorts', (req, res) => {
-  KNEX('cohorts').select('id', 'gnum')
-  .then((justCohort) => {
-    res.status(200).json(justCohort)
-  })
-  .catch((err) => {
-      KNEX.destroy();
-      console.error(err);
-      res.status(500);
-  });
+    let knex = require('knex')(CONFIG);
+
+    knex('cohorts').select('id', 'gnum')
+        .then((justCohort) => {
+            res.status(200).json(justCohort)
+        })
+        .catch((err) => {
+            console.error(err);
+            res.status(500);
+        })
+        .finally(function() {
+            knex.destroy();
+        });
 })
 
 app.use((req, res) => {
