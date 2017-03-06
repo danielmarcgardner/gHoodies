@@ -42,11 +42,7 @@ ROUTER.get('/students', (req, res) => {
 
 ROUTER.post('/students', (req, res) => {
 
-
-    if (!req.body.name ||
-        !req.body.email ||
-        !req.body.size ||
-        !req.body.cohort_id) {
+    if (!req.body.name ||  !req.body.email || !req.body.size || !req.body.cohort_id) {
         res.set('Content-Type', 'text/plain');
         res.body = 'Bad Request';
         return res.sendStatus(400);
@@ -61,39 +57,22 @@ ROUTER.post('/students', (req, res) => {
         cohort_id: req.body.cohort_id
     }
 
-    console.log(newStudent)
-    KNEX('students').insert(newStudent)
+    knex('students').insert(newStudent)
         .then(() => {
-            KNEX('students').where('name', newStudent.name)
+            knex('students').where('name', newStudent.name)
                 .then((studentToSend) => {
                     res.status(200).json(studentToSend)
                 })
         })
         .catch((err) => {
-            KNEX.destroy();
+            knex.destroy();
             console.error(err);
             res.status(500);
         });
 })
 
-
-    knex('students').insert(newStudent)
-        .then(() => {
-            knex('students').where('name', newStudent.name)
-                .then((studentToSend) => {
-                    return res.status(200).json(studentToSend)
-                });
-        })
-        .catch((err) => {
-            console.error(err);
-            return res.status(500);
-        })
-        .finally(function() {
-            knex.destroy();
-        });
-})
-
 ROUTER.get('/students/:id', (req, res) => {
+    let knex = require('knex')(CONFIG);
     let id = Number.parseInt(req.params.id);
 
     if (!id) {
@@ -101,8 +80,6 @@ ROUTER.get('/students/:id', (req, res) => {
         res.body = 'Bad Request';
         return res.sendStatus(400);
     }
-
-    let knex = require('knex')(CONFIG);
 
     knex('students')
         .where('id', id)
@@ -121,22 +98,11 @@ ROUTER.get('/students/:id', (req, res) => {
 ROUTER.get('/students/name/:name', (req, res) => {
     let namewithspace = req.params.name
 
-    function remover(named){
+    function remover(named) {
       let remove = named.split('%20')
       let unname = remove.join(' ')
       return unname
     }
-
-
-    let name = remover(namewithspace)
-
-
-    function remover(named) {
-        let remove = named.split('%20')
-        let unname = remove.join(' ')
-        return unname
-    }
-
 
     let name = remover(namewithspace)
 
