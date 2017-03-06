@@ -21,11 +21,11 @@ ROUTER.get('/students', (req, res) => {
     knex('students')
         .orderBy('name', 'asc')
         .then((students) => {
-            res.status(200).json(students);
+            return res.status(200).json(students);
         })
         .catch((err) => {
             console.error(err);
-            res.status(500);
+            return res.status(500);
         })
         .finally(function() {
             knex.destroy();
@@ -39,7 +39,7 @@ ROUTER.post('/students', (req, res) => {
         !req.body.cohort_id) {
         res.set('Content-Type', 'text/plain');
         res.body = 'Bad Request';
-        res.sendStatus(400);
+        return res.sendStatus(400);
     }
 
     let knex = require('knex')(CONFIG);
@@ -55,12 +55,12 @@ ROUTER.post('/students', (req, res) => {
         .then(() => {
             knex('students').where('name', newStudent.name)
                 .then((studentToSend) => {
-                    res.status(200).json(studentToSend)
-                })
+                    return res.status(200).json(studentToSend)
+                });
         })
         .catch((err) => {
             console.error(err);
-            res.status(500);
+            return res.status(500);
         })
         .finally(function() {
             knex.destroy();
@@ -73,7 +73,7 @@ ROUTER.get('/students/:id', (req, res) => {
     if (!id) {
         res.set('Content-Type', 'text/plain');
         res.body = 'Bad Request';
-        res.sendStatus(400);
+        return res.sendStatus(400);
     }
 
     let knex = require('knex')(CONFIG);
@@ -81,11 +81,11 @@ ROUTER.get('/students/:id', (req, res) => {
     knex('students')
         .where('id', id)
         .then((student) => {
-            res.status(200).json(student);
+            return res.status(200).json(student);
         })
         .catch((err) => {
             console.error(err);
-            res.status(500);
+            return res.status(500);
         })
         .finally(function() {
             knex.destroy();
@@ -106,7 +106,7 @@ ROUTER.get('/students/name/:name', (req, res) => {
     if (!name) {
         res.set('Content-Type', 'text/plain');
         res.body = 'Bad Request';
-        res.sendStatus(400);
+        return res.sendStatus(400);
     }
 
     let knex = require('knex')(CONFIG);
@@ -114,11 +114,11 @@ ROUTER.get('/students/name/:name', (req, res) => {
     knex('students')
         .where('name', name)
         .then((student) => {
-            res.status(200).json(student);
+            return res.status(200).json(student);
         })
         .catch((err) => {
             console.error(err);
-            res.status(500);
+            return res.status(500);
         })
         .finally(function() {
             knex.destroy();
@@ -132,7 +132,7 @@ ROUTER.patch('/students/:id', (req, res) => {
     if (!id) {
         res.set('Content-Type', 'text/plain');
         res.body = 'Bad Request';
-        res.sendStatus(400);
+        return res.sendStatus(400);
     }
 
     let knex = require('knex')(CONFIG);
@@ -144,7 +144,7 @@ ROUTER.patch('/students/:id', (req, res) => {
             knex('students')
                 .where('id', id)
                 .then((student) => {
-                    res.status(202).json(student);
+                    return res.status(202).json(student);
                 });
         })
         .catch((err) => {
@@ -162,7 +162,7 @@ ROUTER.get('/cohorts/:gnum/students', (req, res) => {
     if (!gnum) {
         res.set('Content-Type', 'text/plain');
         res.body = 'Bad Request';
-        res.sendStatus(400);
+        return res.sendStatus(400);
     }
 
     let knex = require('knex')(CONFIG);
@@ -172,11 +172,11 @@ ROUTER.get('/cohorts/:gnum/students', (req, res) => {
         .where(`gnum`, gnum)
         .select('name', 'fulfilled', 'size')
         .then((cohortStudents) => {
-            res.status(200).json(cohortStudents);
+            return res.status(200).json(cohortStudents);
         })
         .catch((err) => {
             console.error(err);
-            res.status(500);
+            return res.status(500);
         })
         .finally(function() {
             knex.destroy();
@@ -188,11 +188,11 @@ ROUTER.get('/cohorts', (req, res) => {
 
     knex('cohorts').select('id', 'gnum')
         .then((justCohort) => {
-            res.status(200).json(justCohort)
+            return res.status(200).json(justCohort)
         })
         .catch((err) => {
             console.error(err);
-            res.status(500);
+            return res.status(500);
         })
         .finally(function() {
             knex.destroy();
@@ -200,7 +200,7 @@ ROUTER.get('/cohorts', (req, res) => {
 })
 
 app.use((req, res) => {
-    res.sendStatus(404);
+    return res.sendStatus(404);
 });
 
 module.exports = ROUTER;
