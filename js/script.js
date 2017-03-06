@@ -3,21 +3,10 @@ $(document).ready(function() {
   $(".dropdown-button").dropdown();
 });
 
-const submitName = $('#submit-name');
-const nameForm = $('#name-form');
-const postRow = $('#post-row');
-const updateRow = $('#update-row');
-
-$.getJSON("/Admin/GetFolderList/", function(result) {
-    for (var i = 0; i < result.length; i++) {
-        options += '<option value="' + result[i].ImageFolderID + '">' + result[i].Name + '</option>';
-    }
-});
-
-var options = $("#options");
-$.each(result, function() {
-    options.append($("<option />").val(this.ImageFolderID).text(this.Name));
-});
+const submitName = $('#submit-name')[0];
+const nameForm = $('#name-form')[0];
+const postRow = $('#post-row')[0];
+const updateRow = $('#update-row')[0];
 
 function fetchJson(url) {
   return fetch(url)
@@ -34,25 +23,39 @@ function fetchJson(url) {
 }
 
 function generatePostForm(){
+	debugger;
 	postRow.setAttribute("style", "");
 	updateRow.setAttribute("style", "display: none");
-	fetchJson(`localhost:8000/cohorts`)
+	fetchJson(`https://localhost:8000/cohorts`)
 	.then((cohorts) => {
-		const select = ${'#cohort-select'};
-		const input = ${'#cohort-input'};
+		const select = $('#cohort-select');
+		const input = $('#cohort-input');
 		$.each(cohorts, (i, val) => {
-			select.append($("<option />").val(this.id).text(this.gnum));
+			select.prepend($("<option />").val(this.id).text(this.gnum));
 		})
 		input.append($("<label />").text("Cohort numer:"))
 		$('select').material_select();
 	})
 }
 
-nameForm.addEventListener("submit"), (event) => {
-	const firstName = $('#first_name');
-	const lastName = $('#last_name');
+function generateEditForm(){
+
+}
+
+nameForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+	debugger;
+	const firstName = $('#first_name')[0].value;
+	const lastName = $('#last_name')[0].value;
 	const fullName = firstName + " " + lastName;
-	const url = (`localhost:8000/students/names/${fullName}`);
+	const url = (`http://localhost:8000/students/name/${fullName}`);
+	// $.getJSON(url, function(result) {
+	// 	if (result.length === 0){
+	// 		generatePostForm();
+	// 	} else {
+	// 		generateEditForm();
+	// 	}
+	// });
 	fetchJson(url)
 	.then((result) => {
 		if (result.length === 0){
@@ -61,4 +64,4 @@ nameForm.addEventListener("submit"), (event) => {
 			generateEditForm();
 		}
 	})
-}
+})
