@@ -197,4 +197,15 @@ ROUTER.get('/cohorts', (req, res) => {
         })
         .catch((err) => {
             console.error(err);
-            return res.s
+            return res.status(500)
+          })
+          .finally(function() {
+            knex.destory()
+          })
+        })
+
+app.use((req, res) => {
+  return res.sendStatus(404)
+});
+
+module.exports = ROUTER
