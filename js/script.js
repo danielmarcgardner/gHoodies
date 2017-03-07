@@ -113,6 +113,7 @@ function generateTable(tableDiv, data) {
 			tBody.append(row);
   });
   return tableCol.append(table[0]);
+	$('select').material_select();
 }
 
 loadResults.addEventListener("click", (event) => {
@@ -135,6 +136,7 @@ reportForm.addEventListener("submit", (event) => {
   fetchJson(`https://warm-hamlet-87053.herokuapp.com/cohorts/${value}/students`)
   .then((coData) => {
     generateTable(tableCol, coData);
+		$('select').material_select();
   })
 })
 
@@ -143,6 +145,8 @@ postForm.addEventListener("submit", (event) => {
 })
 
 updateForm.addEventListener("submit", (event) => {
+	event.preventDefault();
+	// fetch()
   Materialize.toast("You have successfully updated your information in the database!", 8000);
 })
 
