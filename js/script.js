@@ -59,7 +59,7 @@ function fetchJson(url) {
 function generatePostForm(){
 	postRow.setAttribute("style", "");
 	updateRow.setAttribute("style", "display: none");
-	fetchJson(`https://localhost:8000/cohorts`)
+	fetchJson(`https://warm-hamlet-87053.herokuapp.com/students/name/cohorts`)
 	.then((cohorts) => {
 		const select = $('#cohort-select');
 		const input = $('#cohort-input');
@@ -74,7 +74,7 @@ function generatePostForm(){
 function generateEditForm(){
 	postRow.setAttribute("style", "diplay:none");
 	updateRow.setAttribute("style", "");
-	fetchJson(`https://localhost:8000/cohorts`)
+	fetchJson(`https://warm-hamlet-87053.herokuapp.com/cohorts`)
 	.then((cohorts) => {
 		const select = $('#cohort-select');
 		const input = $('#cohort-input');
@@ -129,7 +129,7 @@ nameForm.addEventListener("submit", (event) => {
 	const firstName = $('#first_name')[0].value;
 	const lastName = $('#last_name')[0].value;
 	const fullName = firstName + " " + lastName;
-	const url = (`http://localhost:8000/students/name/${fullName}`);
+	const url = (`https://warm-hamlet-87053.herokuapp.com/students/name/${fullName}`);
 	// $.getJSON(url, function(result) {
 	// 	if (result.length === 0){
 	// 		generatePostForm();

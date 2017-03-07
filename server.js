@@ -4,6 +4,7 @@ const PORT = process.env.PORT || 8000;
 const ROUTES = require('./controllers/routes/routes.js');
 
 APP.use(ROUTES);
+APP.use(EXPRESS.static('./'));
 
 APP.listen(PORT, () => {
   console.log('Listening on port', PORT)
