@@ -90,26 +90,29 @@ function generateReportForm(){
 
 //first parameter will be the column which is a child of a row which is a child of the container
 function generateTable(tableDiv, data) {
-    const table = $("<table/>").addClass('striped');
-		const tHead = $("<thead/>");
-		const tBody = $("<tbody/>");
-    const thRow = $("<tr/>").append(
-  		$("<th/>").text("Student Name"),
-  		$("<th/>").text("Size"),
-  		$("<th/>").text("Fulfillment Status")
-    );
-    tHead.append(thRow);
-		table.append(tHead);
-		table.append(tBody);
-    $.each(data, (i, student) => {
-        const row = $("<tr/>").append(
-					$('<td/>').text(student.name),
-					$('<td/>').text(student.size),
-					$('<td/>').text(student.fulfilled)
-				);
-				tBody.append(row);
-    });
-    return tableCol.append(table[0]);
+	while (tableCol.firstChild) {
+		tableCol.removeChild(tableCol.firstChild);
+	}
+  const table = $("<table/>").addClass('striped');
+	const tHead = $("<thead/>");
+	const tBody = $("<tbody/>");
+  const thRow = $("<tr/>").append(
+		$("<th/>").text("Student Name"),
+		$("<th/>").text("Size"),
+		$("<th/>").text("Fulfillment Status")
+  );
+  tHead.append(thRow);
+	table.append(tHead);
+	table.append(tBody);
+  $.each(data, (i, student) => {
+      const row = $("<tr/>").append(
+				$('<td/>').text(student.name),
+				$('<td/>').text(student.size),
+				$('<td/>').text(student.fulfilled)
+			);
+			tBody.append(row);
+  });
+  return tableCol.append(table[0]);
 }
 
 loadResults.addEventListener("click", (event) => {
@@ -129,7 +132,6 @@ loadRequests.addEventListener("click", (event) => {
 reportForm.addEventListener("submit", (event) => {
   event.preventDefault();
   const value = reportCohortSelect.value;
-  console.log(value);
   fetchJson(`https://warm-hamlet-87053.herokuapp.com/cohorts/${value}/students`)
   .then((coData) => {
     generateTable(tableCol, coData);
