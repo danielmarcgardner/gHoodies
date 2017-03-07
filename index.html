@@ -46,6 +46,14 @@
             </div>
             <div class="row" id="post-row" style="display: none">
                 <form class="col s12" id="post-form" action="http://localhost:8000/students" method="post" style="">
+                  <div class="input-field col s6">
+                      <input placeholder="Enter your full first name" id="first_name" type="text" class="validate" name="firstName">
+                      <label for="first_name">First Name</label>
+                  </div>
+                  <div class="input-field col s6">
+                      <input placeholder="Enter your last name" id="last_name" type="text" class="validate" name="lastName">
+                      <label for="last_name">Last Name</label>
+                  </div>
                     <div class="input-field col s12">
                       <input id="email" type="email" class="validate" name="email">
                       <label for="email">Email</label>
@@ -72,14 +80,6 @@
             </div>
             <div class="row" id="update-row" style="display: none">
                 <form class="col s12" id="update-form" action="" method="patch" style="">
-                    <div class="input-field col s6">
-                        <input placeholder="Enter your full first name" id="update_first_name" type="text" class="validate" name="firstName">
-                        <label for="first_name">First Name</label>
-                    </div>
-                    <div class="input-field col s6">
-                        <input placeholder="Enter your last name" id="update_last_name" type="text" class="validate" name="lastName">
-                        <label for="last_name">Last Name</label>
-                    </div>
                     <div class="input-field col s12" id="update-cohort-input">
                         <select id="update-cohort-select">
 									<option value="" disabled selected>Select your cohort</option>
