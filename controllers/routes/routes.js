@@ -8,6 +8,8 @@ const CONFIG = require("../../knexfile.js")[ENV];
 // const KNEX = require('knex')(CONFIG);
 const morgan = require('morgan');
 const app = EXPRESS();
+const path = require('path');
+const joinPath = path.join(__dirname, '../../index.html');
 
 app.disable('x-powered-by');
 ROUTER.use(bodyParser.json());
@@ -41,8 +43,9 @@ ROUTER.get('/students', (req, res) => {
 });
 
 ROUTER.post('/students', (req, res) => {
-
-    if (!req.body.name ||  !req.body.email || !req.body.size || !req.body.cohort_id) {
+  console.log(req.body);
+  let name = req.body.firstName + " " + req.body.lastName
+    if (!name ||  !req.body.email || !req.body.size || !req.body.cohort_id) {
         res.set('Content-Type', 'text/plain');
         res.body = 'Bad Request';
         return res.sendStatus(400);
@@ -51,17 +54,17 @@ ROUTER.post('/students', (req, res) => {
     let knex = require('knex')(CONFIG);
 
     let newStudent = {
-        name: req.body.name,
+        name: name,
         email: req.body.email,
         size: req.body.size,
         cohort_id: req.body.cohort_id
     }
-
+    console.log(newStudent);
     knex('students').insert(newStudent)
         .then(() => {
             knex('students').where('name', newStudent.name)
                 .then((studentToSend) => {
-                    res.status(200).json(studentToSend)
+                    res.sendFile(joinPath);
                 })
         })
         .catch((err) => {
@@ -129,7 +132,7 @@ ROUTER.get('/students/name/:name', (req, res) => {
 });
 
 ROUTER.patch('/students/:id', (req, res) => {
-
+  console.log(req.body);
     let id = Number.parseInt(req.params.id);
 
     if (!id) {
@@ -147,7 +150,7 @@ ROUTER.patch('/students/:id', (req, res) => {
             knex('students')
                 .where('id', id)
                 .then((student) => {
-                    return res.status(202).json(student);
+                    res.sendFile(joinPath);
                 });
         })
         .catch((err) => {
@@ -171,9 +174,8 @@ ROUTER.get('/cohorts/:gnum/students', (req, res) => {
     let knex = require('knex')(CONFIG);
 
     knex('students')
-        .innerJoin('cohorts', 'cohorts.id', 'students.cohort_id')
-        .where(`gnum`, gnum)
-        .select('name', 'fulfilled', 'size')
+			.join('cohorts', 'cohorts.id', '=', 'students.cohort_id')
+			.select('name', 'fulfilled', 'size').where('cohort_id', gnum)
         .then((cohortStudents) => {
             return res.status(200).json(cohortStudents);
         })
