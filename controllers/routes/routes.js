@@ -128,7 +128,7 @@ ROUTER.get('/students/name/:name', (req, res) => {
         });
 });
 
-ROUTER.patch('/students/:id', (req, res) => {
+ROUTER.put('/students/:id', (req, res) => {
   console.log(req.body);
     let id = Number.parseInt(req.params.id);
 

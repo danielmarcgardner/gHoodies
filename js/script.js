@@ -22,6 +22,10 @@ const reportCohortSelect = $('#report-cohort-select')[0];
 const updateCohortSelect = $('#update-cohort-select')[0];
 const updateSizeSelect = $('#update-size-select')[0];
 let id;
+let created;
+let email;
+let name;
+
 
 function fetchJson(url) {
   return fetch(url)
@@ -151,11 +155,16 @@ postForm.addEventListener("submit", (event) => {
 updateForm.addEventListener("submit", (event) => {
 	event.preventDefault();
 	fetch(`https://warm-hamlet-87053.herokuapp.com/students/${id}`, {
-		method: 'PATCH',
+		method: 'PUT',
 		body: JSON.stringify({
 			cohort_id: updateCohortSelect.value,
 			size: updateSizeSelect.value,
-			updated_at: new Date()
+			updated_at: new Date(),
+      id: id,
+      created_at: created,
+      fulfilled: false,
+      name: name,
+      email: email
 		})
 	});
   Materialize.toast("You have successfully updated your information in the database!", 8000);
@@ -174,6 +183,9 @@ nameForm.addEventListener("submit", (event) => {
 			generatePostForm();
 		} else {
       id = result[0].id;
+      created = result[0].created_at;
+      email = result[0].email;
+      name = result[0].name;
 			generateEditForm(id);
 		}
 	})
