@@ -4,43 +4,21 @@ $(document).ready(function() {
 });
 
 const submitName = $('#submit-name')[0];
+const submitPost = $('#submit-post')[0];
+const idInput = $('#id-input')[0];
 const nameForm = $('#name-form')[0];
+const postForm = $('#post-form')[0];
+const updateForm = $('#update-form')[0];
 const nameFormRow = $('#name-form-row')[0];
 const reportForm = $('#report-form')[0];
 const postRow = $('#post-row')[0];
 const updateRow = $('#update-row')[0];
 const tableRow = $('#table-row')[0];
 const tableCol = $('#table-col')[0];
-const loadRequests =$('#load-requests')[0];
-const loadResults =$('#load-results')[0];
-
-const data = [
-  {
-    "name": "Daniel Gardner",
-    "fulfilled": false,
-    "size": "Large"
-  },
-  {
-    "name": "Matt Muir",
-    "fulfilled": false,
-    "size": "XL"
-  },
-  {
-    "name": "Randall Spencer",
-    "fulfilled": false,
-    "size": "Large"
-  },
-  {
-    "name": "Thomas Stang",
-    "fulfilled": false,
-    "size": "XL"
-  },
-  {
-    "name": "Ryan Thissen",
-    "fulfilled": false,
-    "size": "Large"
-  }
-];
+const loadRequests = $('#load-requests')[0];
+const loadResults = $('#load-results')[0];
+const reportCohortInput = $('#report-cohort-input')[0];
+const reportCohortSelect = $('#report-cohort-select')[0];
 
 function fetchJson(url) {
   return fetch(url)
@@ -59,29 +37,53 @@ function fetchJson(url) {
 function generatePostForm(){
 	postRow.setAttribute("style", "");
 	updateRow.setAttribute("style", "display: none");
-	fetchJson(`https://warm-hamlet-87053.herokuapp.com/students/name/cohorts`)
+  tableRow.setAttribute("style", "display: none");
+  fetchJson(`https://warm-hamlet-87053.herokuapp.com/cohorts`)
 	.then((cohorts) => {
 		const select = $('#cohort-select');
 		const input = $('#cohort-input');
-		$.each(cohorts, (i, val) => {
-			select.prepend($("<option/>").val(this.id).text(this.gnum));
+		$.each(cohorts, (i, value) => {
+			select.prepend($("<option/>").val(value.id).text(value.gnum));
 		})
-		input.append($("<label/>").text("Cohort numer:"))
+		input.append($("<label/>").text("Cohort number:"))
 		$('select').material_select();
 	})
 }
 
-function generateEditForm(){
-	postRow.setAttribute("style", "diplay:none");
+
+function generateEditForm(id){
+	postRow.setAttribute("style", "display: none");
+  tableRow.setAttribute("style", "display: none");
 	updateRow.setAttribute("style", "");
-	fetchJson(`https://warm-hamlet-87053.herokuapp.com/cohorts`)
+  idInput.value = id;
+  console.log(idInput.value);
+
+  updateForm.setAttribute('action', `https://warm-hamlet-87053.herokuapp.com/students/${id}`);
+  updateForm.setAttribute('method', `patch`);
+  fetchJson(`https://warm-hamlet-87053.herokuapp.com/cohorts`)
 	.then((cohorts) => {
-		const select = $('#cohort-select');
-		const input = $('#cohort-input');
-		$.each(cohorts, (i, val) => {
-			select.prepend($("<option/>").val(this.id).text(this.gnum));
+		const select = $('#update-cohort-select');
+		const input = $('#update-cohort-input');
+		$.each(cohorts, (i, value) => {
+			select.prepend($("<option/>").val(value.id).text(value.gnum));
 		})
-		input.append($("<label/>").text("Cohort numer:"))
+		input.append($("<label/>").text("Cohort number:"))
+		$('select').material_select();
+	})
+}
+
+function generateReportForm(){
+	postRow.setAttribute("style", "display:none");
+	updateRow.setAttribute("style", "display: none");
+  tableRow.setAttribute("style", "");
+  fetchJson(`https://warm-hamlet-87053.herokuapp.com/cohorts`)
+	.then((cohorts) => {
+		const select = $('#report-cohort-select');
+		const input = $('#report-cohort-input');
+		$.each(cohorts, (i, value) => {
+			select.prepend($("<option/>").val(value.id).text(value.gnum));
+		})
+		input.append($("<label/>").text("Cohort number:"))
 		$('select').material_select();
 	})
 }
@@ -107,21 +109,39 @@ function generateTable(tableDiv, data) {
 				);
 				tBody.append(row);
     });
-    console.log(table[0]);
-    console.log(tableCol);
     return tableCol.append(table[0]);
 }
 
 loadResults.addEventListener("click", (event) => {
   event.preventDefault();
   nameFormRow.setAttribute("style", "display: none");
-  tableRow.setAttribute("style", "");
+  generateReportForm();
+})
 
+loadRequests.addEventListener("click", (event) => {
+  event.preventDefault();
+  nameFormRow.setAttribute("style", "");
+  postRow.setAttribute("style", "display:none");
+	updateRow.setAttribute("style", "display: none");
+  tableRow.setAttribute("style", "display: none");
 })
 
 reportForm.addEventListener("submit", (event) => {
   event.preventDefault();
-  generateTable(tableCol, data);
+  const value = reportCohortSelect.value;
+  console.log(value);
+  fetchJson(`https://warm-hamlet-87053.herokuapp.com/cohorts/${value}/students`)
+  .then((coData) => {
+    generateTable(tableCol, coData);
+  })
+})
+
+postForm.addEventListener("submit", (event) => {
+  Materialize.toast("You have successfully added your information to the database!", 8000);
+})
+
+updateForm.addEventListener("submit", (event) => {
+  Materialize.toast("You have successfully updated your information in the database!", 8000);
 })
 
 nameForm.addEventListener("submit", (event) => {
@@ -130,19 +150,14 @@ nameForm.addEventListener("submit", (event) => {
 	const lastName = $('#last_name')[0].value;
 	const fullName = firstName + " " + lastName;
 	const url = (`https://warm-hamlet-87053.herokuapp.com/students/name/${fullName}`);
-	// $.getJSON(url, function(result) {
-	// 	if (result.length === 0){
-	// 		generatePostForm();
-	// 	} else {
-	// 		generateEditForm();
-	// 	}
-	// });
 	fetchJson(url)
 	.then((result) => {
+    console.log(result);
 		if (result.length === 0){
 			generatePostForm();
 		} else {
-			generateEditForm();
+      const id = result[0].id;
+			generateEditForm(id);
 		}
 	})
 })
