@@ -63,8 +63,7 @@ ROUTER.post('/students', (req, res) => {
     knex('students').insert(newStudent)
         .then(() => {
             res.redirect('/');
-                })
-        })
+            })
         .catch((err) => {
             knex.destroy();
             console.error(err);
