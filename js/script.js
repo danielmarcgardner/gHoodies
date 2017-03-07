@@ -151,7 +151,7 @@ postForm.addEventListener("submit", (event) => {
 updateForm.addEventListener("submit", (event) => {
 	event.preventDefault();
 	fetch(`https://warm-hamlet-87053.herokuapp.com/students/${id}`, {
-		method: 'put',
+		method: 'PATCH',
 		body: JSON.stringify({
 			cohort_id: updateCohortSelect.value,
 			size: updateSizeSelect.value,
