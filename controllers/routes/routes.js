@@ -41,8 +41,8 @@ ROUTER.get('/students', (req, res) => {
 });
 
 ROUTER.post('/students', (req, res) => {
-
-    if (!req.body.name ||  !req.body.email || !req.body.size || !req.body.cohort_id) {
+let name = req.body.firstName + " " + req.body.lastName
+    if (!name ||  !req.body.email || !req.body.size || !req.body.cohort_id) {
         res.set('Content-Type', 'text/plain');
         res.body = 'Bad Request';
         return res.sendStatus(400);
@@ -51,7 +51,7 @@ ROUTER.post('/students', (req, res) => {
     let knex = require('knex')(CONFIG);
 
     let newStudent = {
-        name: req.body.name,
+        name: name,
         email: req.body.email,
         size: req.body.size,
         cohort_id: req.body.cohort_id
@@ -170,10 +170,9 @@ ROUTER.get('/cohorts/:gnum/students', (req, res) => {
 
     let knex = require('knex')(CONFIG);
 
-    knex('students')
-        .innerJoin('cohorts', 'cohorts.id', 'students.cohort_id')
-        .where(`gnum`, gnum)
-        .select('name', 'fulfilled', 'size')
+    knex('studends')
+      .join('cohorts', 'cohorts.id', '=', 'students.cohort_id')
+      .select('name', 'fulfilled', 'size').where('cohort_id', gnum)
         .then((cohortStudents) => {
             return res.status(200).json(cohortStudents);
         })
