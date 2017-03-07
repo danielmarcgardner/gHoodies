@@ -81,7 +81,7 @@ function generateEditForm(){
 		$.each(cohorts, (i, val) => {
 			select.prepend($("<option/>").val(this.id).text(this.gnum));
 		})
-		input.append($("<label/>").text("Cohort numer:"))
+		input.append($("<label/>").text("Cohort number:"))
 		$('select').material_select();
 	})
 }
