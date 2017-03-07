@@ -88,7 +88,7 @@ function generateReportForm(){
 		$.each(cohorts, (i, value) => {
 			select.prepend($("<option/>").val(value.id).text(value.gnum));
 		})
-		select.insertAdjacentHTML('beforeend', disabled);
+		select[0].insertAdjacentHTML('beforeend', disabled);
 		input.append($("<label/>").text("Cohort number:"))
 		$('select').material_select();
 	})
