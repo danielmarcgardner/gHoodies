@@ -80,9 +80,12 @@ function generateReportForm(){
 	.then((cohorts) => {
 		const select = $('#report-cohort-select');
 		const input = $('#report-cohort-input');
+		const disabled = `<option value="" disabled selected>Select a cohort</option>`;
+		input.removeChild(input.childNodes[1]);
 		$.each(cohorts, (i, value) => {
-			select.prepend($("<option/>").val(value.id).text(value.gnum));
+			select.append($("<option/>").val(value.id).text(value.gnum));
 		})
+		select.insertAdjacentHTML('beforeend', disabled);
 		input.append($("<label/>").text("Cohort number:"))
 		$('select').material_select();
 	})
@@ -113,6 +116,7 @@ function generateTable(tableDiv, data) {
 			tBody.append(row);
   });
   return tableCol.append(table[0]);
+	$('select').material_select();
 }
 
 loadResults.addEventListener("click", (event) => {
@@ -135,6 +139,7 @@ reportForm.addEventListener("submit", (event) => {
   fetchJson(`https://warm-hamlet-87053.herokuapp.com/cohorts/${value}/students`)
   .then((coData) => {
     generateTable(tableCol, coData);
+		$('select').material_select();
   })
 })
 
@@ -143,6 +148,8 @@ postForm.addEventListener("submit", (event) => {
 })
 
 updateForm.addEventListener("submit", (event) => {
+	event.preventDefault();
+	// fetch()
   Materialize.toast("You have successfully updated your information in the database!", 8000);
 })
 
