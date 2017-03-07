@@ -79,7 +79,7 @@ function generateReportForm(){
 	postRow.setAttribute("style", "display:none");
 	updateRow.setAttribute("style", "display: none");
   tableRow.setAttribute("style", "");
-  fetchJson(`https://localhost:8000/cohorts`)
+  fetchJson(`https://warm-hamlet-87053.herokuapp.com/cohorts`)
 	.then((cohorts) => {
 		const select = $('#report-cohort-select');
 		const input = $('#report-cohort-input');
