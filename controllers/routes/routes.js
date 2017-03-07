@@ -62,9 +62,7 @@ ROUTER.post('/students', (req, res) => {
     console.log(newStudent);
     knex('students').insert(newStudent)
         .then(() => {
-            knex('students').where('name', newStudent.name)
-                .then((studentToSend) => {
-                    res.sendFile(joinPath);
+            res.redirect('/');
                 })
         })
         .catch((err) => {
