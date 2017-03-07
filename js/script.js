@@ -84,7 +84,7 @@ function generateReportForm(){
 		const select = $('#report-cohort-select');
 		const input = $('#report-cohort-input');
 		const disabled = `<option value="" disabled selected>Select a cohort</option>`;
-		input[0].removeChild(input[0].children[1]);
+		input[0].removeChild(input[0].childNode[1]);
 		$.each(cohorts, (i, value) => {
 			select.prepend($("<option/>").val(value.id).text(value.gnum));
 		})
