@@ -19,6 +19,9 @@ const loadRequests = $('#load-requests')[0];
 const loadResults = $('#load-results')[0];
 const reportCohortInput = $('#report-cohort-input')[0];
 const reportCohortSelect = $('#report-cohort-select')[0];
+const updateCohortSelect = $('#update-cohort-select')[0];
+const updateSizeSelect = $('#update-size-select')[0];
+let id;
 
 function fetchJson(url) {
   return fetch(url)
@@ -76,14 +79,14 @@ function generateReportForm(){
 	postRow.setAttribute("style", "display:none");
 	updateRow.setAttribute("style", "display: none");
   tableRow.setAttribute("style", "");
-  fetchJson(`https://warm-hamlet-87053.herokuapp.com/cohorts`)
+  fetchJson(`https://localhost:8000/cohorts`)
 	.then((cohorts) => {
 		const select = $('#report-cohort-select');
 		const input = $('#report-cohort-input');
 		const disabled = `<option value="" disabled selected>Select a cohort</option>`;
 		input.removeChild(input.childNodes[1]);
 		$.each(cohorts, (i, value) => {
-			select.append($("<option/>").val(value.id).text(value.gnum));
+			select.prepend($("<option/>").val(value.id).text(value.gnum));
 		})
 		select.insertAdjacentHTML('beforeend', disabled);
 		input.append($("<label/>").text("Cohort number:"))
@@ -116,7 +119,6 @@ function generateTable(tableDiv, data) {
 			tBody.append(row);
   });
   return tableCol.append(table[0]);
-	$('select').material_select();
 }
 
 loadResults.addEventListener("click", (event) => {
@@ -139,7 +141,6 @@ reportForm.addEventListener("submit", (event) => {
   fetchJson(`https://warm-hamlet-87053.herokuapp.com/cohorts/${value}/students`)
   .then((coData) => {
     generateTable(tableCol, coData);
-		$('select').material_select();
   })
 })
 
@@ -149,7 +150,14 @@ postForm.addEventListener("submit", (event) => {
 
 updateForm.addEventListener("submit", (event) => {
 	event.preventDefault();
-	// fetch()
+	fetch(`https://warm-hamlet-87053.herokuapp.com/students/${id}`, {
+		method: 'put',
+		body: JSON.stringify({
+			cohort_id: updateCohortSelect.value,
+			size: updateSizeSelect.value,
+			updated_at: new Date()
+		})
+	});
   Materialize.toast("You have successfully updated your information in the database!", 8000);
 })
 
@@ -165,7 +173,7 @@ nameForm.addEventListener("submit", (event) => {
 		if (result.length === 0){
 			generatePostForm();
 		} else {
-      const id = result[0].id;
+      id = result[0].id;
 			generateEditForm(id);
 		}
 	})
