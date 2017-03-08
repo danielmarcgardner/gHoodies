@@ -208,5 +208,8 @@ ROUTER.get('/cohorts', (req, res) => {
           })
         })
 
+app.use((req, res) => {
+  return res.sendStatus(404)
+});
 
 module.exports = ROUTER
