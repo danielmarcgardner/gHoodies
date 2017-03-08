@@ -57,14 +57,11 @@ function generatePostForm(){
 	})
 }
 
-
 function generateEditForm(id){
 	postRow.setAttribute("style", "display: none");
   tableRow.setAttribute("style", "display: none");
 	updateRow.setAttribute("style", "");
   idInput.value = id;
-  console.log(idInput.value);
-
   updateForm.setAttribute('action', `https://warm-hamlet-87053.herokuapp.com/students/${id}`);
   updateForm.setAttribute('method', `patch`);
   fetchJson(`https://warm-hamlet-87053.herokuapp.com/cohorts`)
@@ -89,6 +86,7 @@ function generateReportForm(){
 		const input = $('#report-cohort-input');
 		const disabled = `<option value="" disabled selected>Select a cohort</option>`;
 		input.find('label').remove();
+    select.empty();
 		$.each(cohorts, (i, value) => {
 			select.prepend($("<option/>").val(value.id).text(value.gnum));
 		})
@@ -154,19 +152,21 @@ postForm.addEventListener("submit", (event) => {
 
 updateForm.addEventListener("submit", (event) => {
 	event.preventDefault();
-	fetch(`https://warm-hamlet-87053.herokuapp.com/students/${id}`, {
-		method: 'PUT',
-		body: JSON.stringify({
-			cohort_id: updateCohortSelect.value,
-			size: updateSizeSelect.value,
-			updated_at: new Date(),
-      id: id,
-      created_at: created,
-      fulfilled: false,
-      name: name,
-      email: email
-		})
-	});
+let data = {
+    cohort_id: Number(updateCohortSelect.value),
+    size: updateSizeSelect.value,
+    id: id,
+    created_at: created,
+    fulfilled: false,
+    name: name,
+    email: email
+  };
+  $.ajax({
+    url: `https://warm-hamlet-87053.herokuapp.com/students/${id}`,
+    type: 'PATCH',
+    data: data,
+    dataType: 'application/json'
+  })
   Materialize.toast("You have successfully updated your information in the database!", 8000);
 })
 
@@ -178,7 +178,6 @@ nameForm.addEventListener("submit", (event) => {
 	const url = (`https://warm-hamlet-87053.herokuapp.com/students/name/${fullName}`);
 	fetchJson(url)
 	.then((result) => {
-    console.log(result);
 		if (result.length === 0){
 			generatePostForm();
 		} else {

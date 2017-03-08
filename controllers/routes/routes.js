@@ -128,27 +128,34 @@ ROUTER.get('/students/name/:name', (req, res) => {
         });
 });
 
-ROUTER.put('/students/:id', (req, res) => {
-  console.log(req.body);
-    let id = Number.parseInt(req.params.id);
+ROUTER.patch('/students/:idStudent', (req, res) => {
+    let idStudent = Number.parseInt(req.params.idStudent);
 
-    if (!id) {
+    if (!idStudent) {
         res.set('Content-Type', 'text/plain');
         res.body = 'Bad Request';
         return res.sendStatus(400);
     }
 
     let knex = require('knex')(CONFIG);
+    let id = req.body.id;
+
+    let updated = {
+      cohort_id: Number(req.body.cohort_id),
+      size: req.body.size,
+      id: req.body.id,
+      created_at: req.body.created_at,
+      fulfilled: false,
+      name: req.body.name,
+      email: req.body.email,
+      updated_at: knex.fn.now()
+    }
 
     knex('students')
         .where('id', id)
-        .update(req.body)
+        .update(updated)
         .then((data) => {
-            knex('students')
-                .where('id', id)
-                .then((student) => {
-                    res.sendFile(joinPath);
-                });
+            res.redirect('/');
         })
         .catch((err) => {
             console.error(err.stack);
@@ -197,7 +204,7 @@ ROUTER.get('/cohorts', (req, res) => {
             return res.status(500)
           })
           .finally(function() {
-            knex.destory()
+            knex.destroy()
           })
         })
 
