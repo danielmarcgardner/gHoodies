@@ -24,7 +24,7 @@ exports.seed = function(knex, Promise) {
             cohort_id: 1
           },
           {
-            name: 'Matt Muir',
+            name: 'Matt Muhr',
             email: 'mmuhr88@gmail.com',
             size: 'XL',
             fulfilled: false,
@@ -33,14 +33,14 @@ exports.seed = function(knex, Promise) {
           {
             name: 'Randall Spencer',
             email: 'randallspencer@gmail.com',
-            size: 'Large',
+            size: 'Medium',
             fulfilled: false,
             cohort_id: 1
           },
           {
             name: 'Thomas Stang',
             email: 'stang.tk@gmail.com',
-            size: 'XL',
+            size: 'XXL',
             fulfilled: false,
             cohort_id: 1
           },
