@@ -45,7 +45,7 @@ function generatePostForm(){
 	postRow.setAttribute("style", "");
 	updateRow.setAttribute("style", "display: none");
   tableRow.setAttribute("style", "display: none");
-  fetchJson(`https://warm-hamlet-87053.herokuapp.com/cohorts`)
+  fetchJson(`https://ghoodies.herokuapp.com/cohorts`)
 	.then((cohorts) => {
 		const select = $('#cohort-select');
 		const input = $('#cohort-input');
@@ -62,9 +62,9 @@ function generateEditForm(id){
   tableRow.setAttribute("style", "display: none");
 	updateRow.setAttribute("style", "");
   idInput.value = id;
-  updateForm.setAttribute('action', `https://warm-hamlet-87053.herokuapp.com/students/${id}`);
+  updateForm.setAttribute('action', `https://ghoodies.herokuapp.com/students/${id}`);
   updateForm.setAttribute('method', `patch`);
-  fetchJson(`https://warm-hamlet-87053.herokuapp.com/cohorts`)
+  fetchJson(`https://ghoodies.herokuapp.com/cohorts`)
 	.then((cohorts) => {
 		const select = $('#update-cohort-select');
 		const input = $('#update-cohort-input');
@@ -80,7 +80,7 @@ function generateReportForm(){
 	postRow.setAttribute("style", "display:none");
 	updateRow.setAttribute("style", "display: none");
   tableRow.setAttribute("style", "");
-  fetchJson(`https://warm-hamlet-87053.herokuapp.com/cohorts`)
+  fetchJson(`https://ghoodies.herokuapp.com/cohorts`)
 	.then((cohorts) => {
 		const select = $('#report-cohort-select');
 		const input = $('#report-cohort-input');
@@ -140,7 +140,7 @@ loadRequests.addEventListener("click", (event) => {
 reportForm.addEventListener("submit", (event) => {
   event.preventDefault();
   const value = reportCohortSelect.value;
-  fetchJson(`https://warm-hamlet-87053.herokuapp.com/cohorts/${value}/students`)
+  fetchJson(`https://ghoodies.herokuapp.com/cohorts/${value}/students`)
   .then((coData) => {
     generateTable(tableCol, coData);
   })
@@ -162,7 +162,7 @@ let data = {
     email: email
   };
   $.ajax({
-    url: `https://warm-hamlet-87053.herokuapp.com/students/${id}`,
+    url: `https://ghoodies.herokuapp.com/students/${id}`,
     type: 'PATCH',
     data: data,
     dataType: 'application/json'
@@ -175,7 +175,7 @@ nameForm.addEventListener("submit", (event) => {
 	const firstName = $('#first_name')[0].value;
 	const lastName = $('#last_name')[0].value;
 	const fullName = firstName + " " + lastName;
-	const url = (`https://warm-hamlet-87053.herokuapp.com/students/name/${fullName}`);
+	const url = (`https://ghoodies.herokuapp.com/students/name/${fullName}`);
 	fetchJson(url)
 	.then((result) => {
 		if (result.length === 0){
