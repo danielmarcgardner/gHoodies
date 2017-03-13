@@ -1,13 +1,57 @@
+.nav-wrapper {
+	margin-left: 10px;
+}
+
 .nav-wrapper a {
-	color: #e0e0e0
+	color: #FFFFFF;
 }
 
 .page-footer {
-	color: #e0e0e0
+	color: #FFFFFF;
+	padding-top: 0px;
+}
+
+.header {
+    background: url('../images/galvanize-logo.svg') center center;
+		/*-webkit-background-size: cover;
+	  -moz-background-size: cover;
+	  -o-background-size: cover;
+    background-size: cover;*/
+		background-repeat: no-repeat;
+		background-size: 60%;
+		width: 100%;
+    height: 20rem;
+		padding: 50px;
+    /*height: auto;*/
+    background-color: #333333;
+    color: #A7A9AC;
+}
+
+.nav-text {
+    color: #FFFFFF;
+    /*font-size: 48px;*/
+}
+
+#content {
+	margin-top: 5%;
+}
+
+#synopsis-col {
+	color: #999999;
+	padding-right: 3%;
+}
+
+#name-col {
+	padding-left: 3%;
+}
+
+h4 {
+	margin-top: 0px;
+	color: #999999;
 }
 
 h5 {
-	color: #e0e0e0
+	color: #FFFFFF
 }
 
 body {
@@ -18,4 +62,20 @@ body {
 
 main {
 	flex: 1 0 auto;
+}x;
+
+footer {
+	padding: 15px;
+}
+
+/*footer .page-footer {
+	padding: 10px;
+}
+
+#foot {
+	padding-top: 10px;
+}*/
+
+#footer-copyright {
+  padding-left: 10px;
 }

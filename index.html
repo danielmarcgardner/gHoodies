@@ -11,49 +11,63 @@
 </head>
 
 <body>
-    <nav>
-        <div class="nav-wrapper #f57c00 orange darken-1">
-            <a href="#" class="brand-logo nav-text">gHoodies</a>
+    <nav class="#f7901E orange">
+        <div class="nav-wrapper #f7901E orange">
+            <a href="#" class="brand-logo nav-text left">gSwag</a>
             <ul id="nav-mobile" class="right">
-                <li><a href="#!" id="load-requests" class="nav-text">Submit Requests</a></li>
-                <li><a href="#!" id="load-results" class="nav-text">View Requests</a></li>
+                <li><a href="#!" id="load-requests" class="nav-text">Home</a></li>
+                <li><a href="#!" id="load-results" class="nav-text">View</a></li>
+			    <li><a href="#!" id="load-about" class="nav-text">About</a></li>
             </ul>
         </div>
     </nav>
-
+		<div class="header">
+        <div class="header-content">
+            <h2></h2>
+        </div>
+    </div>
     <main>
         <div class="container" id="content">
-            <div class="row">
+            <div class="row" id="landing">
+            <div class="col s6 text-align center" id="synopsis-col">
+                <h4>The Back Story</h4> <p>Like all great ideas gSwag was born from a complaint from students who wanted their hoodies earlier than graduation. An instructor challenged the students in Galvanize's G42 Web Development Immersive. He explained to them that they now had the necessary skills to design a basic CRUD application and a database with all of the cohorts's student information and told them if they wanted them so badly maybe if they build an app for it someone in management just might decide they deserved to get their sweatshirts early. With the very busy schedule these students have this may have been in jest, however, it turns out a few students were very cold. Incoming and current Galvanize students can search to see if they are currently in the database on the right. Students who are not yet in the database are able to add their information and sizing specifications. Students already existing in the database may make sizing changes if needed. To view all records by cohort please click on the view link in the navigation bar.</p>
             </div>
-            <div class="row">
+            <div class="row" id="about" style="display: none">
+                <div class="col s12">
+                    <p>gSwag is built with HTML, CSS, Materialize, Javascript, jQuery, Node.js, Express, Postgesql and Knex. gSwag was lead on the Front-End by Thomas Stang (@tkstang) and on the Back-End by Daniel Gardner (@danielmarcgardner) with contributions by Randall Spencer (@holdonowgo), Matt Muir (@Mattimus333), and Ryan Thissen (@ryanthissen).</p>
+                </div>
             </div>
-            <div class="row" id="name-form-row">
-                <form class="col s12" id="name-form">
-                    <div class="row">
-                        <div class="input-field col s6">
-                            <input placeholder="Enter your full first name" id="first_name" type="text" class="validate">
-                            <label for="first_name">First Name</label>
+            <div class="col s6" id="name-col">
+                <h4 class="text-align center">Search By Student</h4><br><br>
+                <div class="row" id="name-form-row">
+                    <form class="col s12" id="name-form">
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <input placeholder="Enter your full first name" id="search-name" type="text" class="validate">
+                                <label for="search-name">First Name</label>
+                            </div>
+                            <div class="input-field col s12">
+                                <input placeholder="Enter your last name" id="search-surname" type="text" class="validate">
+                                <label for="search-surame">Last Name</label>
+                            </div>
                         </div>
-                        <div class="input-field col s6">
-                            <input placeholder="Enter your last name" id="last_name" type="text" class="validate">
-                            <label for="last_name">Last Name</label>
+                        <div class="row center col s12">
+                            <input type="submit" class="btn-large waves-effect waves-light grey valign-wrapper" id="submit-name" value="Submit">
                         </div>
-                    </div>
-                    <div class="row center col s12">
-                        <input type="submit" class="btn-large waves-effect waves-light grey valign-wrapper" id="submit-name" value="Submit">
-                    </div>
-                </form>
+                    </form>
+                </div>
+            </div>
             </div>
             <div class="row" id="post-row" style="display: none">
                 <form class="col s12" id="post-form" action="https://ghoodies.herokuapp.com/students/" method="post" style="">
                   <div class="input-field col s6">
-                      <input placeholder="Enter your full first name" id="first_name" type="text" class="validate" name="firstName">
-                      <label for="first_name">First Name</label>
+                      <input placeholder="Enter your full first name" id="post-name" type="text" class="validate" name="firstName">
+                      <label for="post-name">First Name</label>
                   </div>
                   <div class="input-field col s6">
-                      <input placeholder="Enter your last name" id="last_name" type="text" class="validate" name="lastName">
-                      <label for="last_name">Last Name</label>
-                  </div>
+                      <input placeholder="Enter your last name" id="post-surname" type="text" class="validate" name="lastName">
+                      <label for="post-surname">Last Name</label>
+                  </div> -->
                     <div class="input-field col s12">
                       <input id="email" type="email" class="validate" name="email">
                       <label for="email">Email</label>
@@ -63,9 +77,20 @@
                     <option value="" disabled selected>Select your cohort</option>
                   </select>
                     </div>
+                    <div class="input-field col s12" id="t-size-input" name="t-size">
+                        <select id="t-size-select" name="t-size">
+							<option value="" disabled selected>Select your t-shirt size</option>
+							<option value="XS">Extra Small</option>
+							<option value="Small">Small</option>
+							<option value="Medium">Medium</option>
+							<option value="Large">Large</option>
+							<option value="XL">Extra Large</option>
+							<option value="XXL">XX Large</option>
+						</select>
+                    </div>
                     <div class="input-field col s12" id="size-input" name="size">
                         <select id="size-select" name="size">
-							<option value="" disabled selected>Select your size</option>
+							<option value="" disabled selected>Select your hoodie size</option>
 							<option value="Small">Small</option>
 							<option value="Medium">Medium</option>
 							<option value="Large">Large</option>
@@ -79,10 +104,22 @@
                 </form>
             </div>
             <div class="row" id="update-row" style="display: none">
-                <form class="col s12" id="update-form" action="" method="" style="">
+                <form class="col s12" id="update-form" action="" method="patch" style="">
                     <div class="input-field col s12" id="update-cohort-input">
                         <select id="update-cohort-select">
+									<option value="" disabled selected>Select your cohort</option>
 								</select>
+                    </div>
+                    <div class="input-field col s6" id="update-t-size-input" name="update-t-size">
+                        <select id="update-t-size-select" name="update-t-size">
+							<option value="" disabled selected>Select your t-shirt size</option>
+							<option value="XS">Extra Small</option>
+							<option value="Small">Small</option>
+							<option value="Medium">Medium</option>
+							<option value="Large">Large</option>
+							<option value="XL">Extra Large</option>
+							<option value="XXL">XX Large</option>
+						</select>
                     </div>
                     <div class="input-field col s12" id="update-size-input">
                         <select id="update-size-select">
@@ -106,7 +143,8 @@
                 <form class="col s12" id="report-form" style="">
                     <div class="input-field col s12" id="report-cohort-input">
                         <select id="report-cohort-select">
-								</select>
+													<!-- <option value="" disabled selected>Select a cohort</option> -->
+											</select>
                     </div>
 
                     <div class="row center col s12">
@@ -118,18 +156,15 @@
             </div>
         </div>
     </main>
-    <footer class="page-footer #f57c00 orange darken-1">
+    <footer class="page-footer #f7901E orange" id="foot">
         <div class="row">
             <div class="col s6">
-                <ul>
-                    <li><a class="grey-text text-lighten-3 left" href="index.html">Home</a></li>
-                </ul>
             </div>
             <div class="col s6">
-                <h5 class="right">gHoodies</h5><br><br>
+<a class="white-text right" id="load-admin" href="#!">Admin</a>
             </div>
         </div>
-        <div class="footer-copyright #f57c00 orange darken-2" id="footer-copyright">
+        <div class="footer-copyright #f7901E orange white-text darken-1" id="footer-copyright">
             © 2017 Swag Hackers
         </div>
     </footer>

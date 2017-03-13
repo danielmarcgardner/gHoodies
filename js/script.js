@@ -5,18 +5,23 @@ $(document).ready(function() {
 
 const submitName = $('#submit-name')[0];
 const submitPost = $('#submit-post')[0];
-const idInput = $('#id-input')[0];
+const landing = $('#landing')[0];
+const about = $('#about')[0];
 const nameForm = $('#name-form')[0];
 const postForm = $('#post-form')[0];
 const updateForm = $('#update-form')[0];
-const nameFormRow = $('#name-form-row')[0];
 const reportForm = $('#report-form')[0];
+const nameFormRow = $('#name-form-row')[0];
 const postRow = $('#post-row')[0];
 const updateRow = $('#update-row')[0];
 const tableRow = $('#table-row')[0];
 const tableCol = $('#table-col')[0];
+const loadAbout = $('#load-about')[0];
 const loadRequests = $('#load-requests')[0];
 const loadResults = $('#load-results')[0];
+const loadAdmin = $('#load-admin')[0];
+const loadLanding = $('#load-landing')[0];
+const idInput = $('#id-input')[0];
 const reportCohortInput = $('#report-cohort-input')[0];
 const reportCohortSelect = $('#report-cohort-select')[0];
 const updateCohortSelect = $('#update-cohort-select')[0];
@@ -25,7 +30,6 @@ let id;
 let created;
 let email;
 let name;
-
 
 function fetchJson(url) {
   return fetch(url)
@@ -41,10 +45,42 @@ function fetchJson(url) {
   });
 }
 
-function generatePostForm(){
-	postRow.setAttribute("style", "");
+function hideContents(){
+	landing.setAttribute("style", "display:none");
+	about.setAttribute("style", "display:none");
+	postRow.setAttribute("style", "display:none");
 	updateRow.setAttribute("style", "display: none");
-  tableRow.setAttribute("style", "display: none");
+	tableRow.setAttribute("style", "display: none");
+}
+
+function generatePostForm(){
+	hideContents();
+	postRow.setAttribute("style", "");
+	$('#post-row').prepend('<div/>', {"class": 'input-field col s6'})
+		.append('input', {
+			"class": 'validate',
+			id: 'post-name',
+			type: 'text',
+			name: 'firstName',
+			placeholder: 'Enter your full first name',
+			value: $('#search-name')[0].value
+		}).append('label', {
+			for: 'post-name',
+			text: $('#search-name')[0].text
+		})
+		$('#post-row').prepend('<div/>', {"class": 'input-field col s6'})
+			.append('input', {
+				"class": 'validate',
+				id: 'post-surname',
+				type: 'text',
+				name: 'lastName',
+				placeholder: 'Enter your last name',
+				value: $('#search-surname')[0].value
+			}).append('label', {
+				for: 'post-surname',
+				text: $('#search-surname')[0].text
+			})
+
   fetchJson(`https://ghoodies.herokuapp.com/cohorts`)
 	.then((cohorts) => {
 		const select = $('#cohort-select');
@@ -58,8 +94,7 @@ function generatePostForm(){
 }
 
 function generateEditForm(id){
-	postRow.setAttribute("style", "display: none");
-  tableRow.setAttribute("style", "display: none");
+	hideContents();
 	updateRow.setAttribute("style", "");
   idInput.value = id;
   updateForm.setAttribute('action', `https://ghoodies.herokuapp.com/students/${id}`);
@@ -77,8 +112,7 @@ function generateEditForm(id){
 }
 
 function generateReportForm(){
-	postRow.setAttribute("style", "display:none");
-	updateRow.setAttribute("style", "display: none");
+	hideContents();
   tableRow.setAttribute("style", "");
   fetchJson(`https://ghoodies.herokuapp.com/cohorts`)
 	.then((cohorts) => {
@@ -125,16 +159,20 @@ function generateTable(tableDiv, data) {
 
 loadResults.addEventListener("click", (event) => {
   event.preventDefault();
-  nameFormRow.setAttribute("style", "display: none");
+  landing.setAttribute("style", "display: none");
   generateReportForm();
 })
 
 loadRequests.addEventListener("click", (event) => {
   event.preventDefault();
-  nameFormRow.setAttribute("style", "");
-  postRow.setAttribute("style", "display:none");
-	updateRow.setAttribute("style", "display: none");
-  tableRow.setAttribute("style", "display: none");
+	hideContents();
+	landing.setAttribute("style", "");
+})
+
+loadAbout.addEventListener("click", (event) => {
+  event.preventDefault();
+	hideContents();
+	about.setAttribute("style", "");
 })
 
 reportForm.addEventListener("submit", (event) => {
@@ -152,28 +190,28 @@ postForm.addEventListener("submit", (event) => {
 
 updateForm.addEventListener("submit", (event) => {
 	event.preventDefault();
-let data = {
-    cohort_id: Number(updateCohortSelect.value),
-    size: updateSizeSelect.value,
-    id: id,
-    created_at: created,
-    fulfilled: false,
-    name: name,
-    email: email
-  };
-  $.ajax({
-    url: `https://ghoodies.herokuapp.com/students/${id}`,
-    type: 'PATCH',
-    data: data,
-    dataType: 'application/json'
-  })
-  Materialize.toast("You have successfully updated your information in the database!", 8000);
+	let data = {
+	    cohort_id: Number(updateCohortSelect.value),
+	    size: updateSizeSelect.value,
+	    id: id,
+	    created_at: created,
+	    fulfilled: false,
+	    name: name,
+	    email: email
+	  };
+	  $.ajax({
+      url: `https://ghoodies.herokuapp.com/students/${id}`,
+	    type: 'PATCH',
+	    data: data,
+	    dataType: 'application/json'
+	  })
+	  Materialize.toast("You have successfully updated your information in the database!", 8000);
 })
 
 nameForm.addEventListener("submit", (event) => {
   event.preventDefault();
-	const firstName = $('#first_name')[0].value;
-	const lastName = $('#last_name')[0].value;
+	const firstName = $('#search-name')[0].value;
+	const lastName = $('#search-surname')[0].value;
 	const fullName = firstName + " " + lastName;
 	const url = (`https://ghoodies.herokuapp.com/students/name/${fullName}`);
 	fetchJson(url)
