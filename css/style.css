@@ -1,9 +1,14 @@
+.nav-wrapper {
+	margin-left: 10px;
+}
+
 .nav-wrapper a {
 	color: #FFFFFF;
 }
 
 .page-footer {
 	color: #FFFFFF;
+	padding-top: 0px;
 }
 
 .header {
@@ -27,6 +32,24 @@
     /*font-size: 48px;*/
 }
 
+#content {
+	margin-top: 5%;
+}
+
+#synopsis-col {
+	color: #999999;
+	padding-right: 3%;
+}
+
+#name-col {
+	padding-left: 3%;
+}
+
+h4 {
+	margin-top: 0px;
+	color: #999999;
+}
+
 h5 {
 	color: #FFFFFF
 }
@@ -39,7 +62,19 @@ body {
 
 main {
 	flex: 1 0 auto;
+}x;
+
+footer {
+	padding: 15px;
 }
+
+/*footer .page-footer {
+	padding: 10px;
+}
+
+#foot {
+	padding-top: 10px;
+}*/
 
 #footer-copyright {
   padding-left: 10px;
