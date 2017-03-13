@@ -1,13 +1,34 @@
 .nav-wrapper a {
-	color: #e0e0e0
+	color: #FFFFFF;
 }
 
 .page-footer {
-	color: #e0e0e0
+	color: #FFFFFF;
+}
+
+.header {
+    background: url('../images/galvanize-logo.svg') center center;
+		/*-webkit-background-size: cover;
+	  -moz-background-size: cover;
+	  -o-background-size: cover;
+    background-size: cover;*/
+		background-repeat: no-repeat;
+		background-size: 60%;
+		width: 100%;
+    height: 20rem;
+		padding: 50px;
+    /*height: auto;*/
+    background-color: #333333;
+    color: #A7A9AC;
+}
+
+.nav-text {
+    color: #FFFFFF;
+    /*font-size: 48px;*/
 }
 
 h5 {
-	color: #e0e0e0
+	color: #FFFFFF
 }
 
 body {
@@ -18,4 +39,8 @@ body {
 
 main {
 	flex: 1 0 auto;
+}
+
+#footer-copyright {
+  padding-left: 10px;
 }

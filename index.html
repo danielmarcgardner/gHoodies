@@ -12,15 +12,20 @@
 
 <body>
     <nav>
-        <div class="nav-wrapper #f57c00 orange darken-1">
-            <a href="#" class="brand-logo nav-text">gHoodies</a>
+        <div class="nav-wrapper #f7901E orange">
+            <a href="#" class="brand-logo nav-text left">gSwag</a>
             <ul id="nav-mobile" class="right">
-                <li><a href="#!" id="load-requests" class="nav-text">Submit Requests</a></li>
-                <li><a href="#!" id="load-results" class="nav-text">View Requests</a></li>
+                <li><a href="#!" id="load-requests" class="nav-text">Submit</a></li>
+                <li><a href="#!" id="load-results" class="nav-text">View</a></li>
+			    <li><a href="#!" id="load-about" class="nav-text">About</a></li>
             </ul>
         </div>
     </nav>
-
+		<div class="header">
+        <div class="header-content">
+            <h2></h2>
+        </div>
+    </div>
     <main>
         <div class="container" id="content">
             <div class="row">
@@ -31,12 +36,12 @@
                 <form class="col s12" id="name-form">
                     <div class="row">
                         <div class="input-field col s6">
-                            <input placeholder="Enter your full first name" id="first_name" type="text" class="validate">
-                            <label for="first_name">First Name</label>
+                            <input placeholder="Enter your full first name" id="search-name" type="text" class="validate">
+                            <label for="search-name">First Name</label>
                         </div>
                         <div class="input-field col s6">
-                            <input placeholder="Enter your last name" id="last_name" type="text" class="validate">
-                            <label for="last_name">Last Name</label>
+                            <input placeholder="Enter your last name" id="search-surname" type="text" class="validate">
+                            <label for="search-surame">Last Name</label>
                         </div>
                     </div>
                     <div class="row center col s12">
@@ -46,14 +51,14 @@
             </div>
             <div class="row" id="post-row" style="display: none">
                 <form class="col s12" id="post-form" action="https://warm-hamlet-87053.herokuapp.com/students/" method="post" style="">
-                  <div class="input-field col s6">
-                      <input placeholder="Enter your full first name" id="first_name" type="text" class="validate" name="firstName">
-                      <label for="first_name">First Name</label>
+                  <!-- <div class="input-field col s6">
+                      <input placeholder="Enter your full first name" id="post-name" type="text" class="validate" name="firstName">
+                      <label for="post-name">First Name</label>
                   </div>
                   <div class="input-field col s6">
-                      <input placeholder="Enter your last name" id="last_name" type="text" class="validate" name="lastName">
-                      <label for="last_name">Last Name</label>
-                  </div>
+                      <input placeholder="Enter your last name" id="post-surname" type="text" class="validate" name="lastName">
+                      <label for="post-surname">Last Name</label>
+                  </div> -->
                     <div class="input-field col s12">
                       <input id="email" type="email" class="validate" name="email">
                       <label for="email">Email</label>
@@ -79,9 +84,10 @@
                 </form>
             </div>
             <div class="row" id="update-row" style="display: none">
-                <form class="col s12" id="update-form" action="" method="" style="">
+                <form class="col s12" id="update-form" action="" method="patch" style="">
                     <div class="input-field col s12" id="update-cohort-input">
                         <select id="update-cohort-select">
+									<option value="" disabled selected>Select your cohort</option>
 								</select>
                     </div>
                     <div class="input-field col s12" id="update-size-input">
@@ -106,7 +112,8 @@
                 <form class="col s12" id="report-form" style="">
                     <div class="input-field col s12" id="report-cohort-input">
                         <select id="report-cohort-select">
-								</select>
+													<!-- <option value="" disabled selected>Select a cohort</option> -->
+											</select>
                     </div>
 
                     <div class="row center col s12">
@@ -118,18 +125,18 @@
             </div>
         </div>
     </main>
-    <footer class="page-footer #f57c00 orange darken-1">
+    <footer class="page-footer #f7901E orange">
         <div class="row">
             <div class="col s6">
                 <ul>
-                    <li><a class="grey-text text-lighten-3 left" href="index.html">Home</a></li>
+                    <li><a class="white-text left" id="load-admin" href="#!">Admin</a></li>
                 </ul>
             </div>
             <div class="col s6">
-                <h5 class="right">gHoodies</h5><br><br>
+                <h5 class="right">gSwag</h5><br><br>
             </div>
         </div>
-        <div class="footer-copyright #f57c00 orange darken-2" id="footer-copyright">
+        <div class="footer-copyright #f7901E orange darken-1 white-text darken-1" id="footer-copyright">
             © 2017 Swag Hackers
         </div>
     </footer>
